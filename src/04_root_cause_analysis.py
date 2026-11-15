@@ -102,23 +102,33 @@ def root_cause_analysis(df):
         for region, count in fraud_by_region.items():
             print(f"   → {region}: {count:,} suspected fraud orders")
 
-    # ── SUMMARY ────────────────────────────────────────────────
+    # ── SUMMARY (derived from the results above) ───────────────
+    top_loss_mode = rca_shipping['Revenue_Lost'].idxmax()
+    top_loss_amt = rca_shipping.loc[top_loss_mode, 'Revenue_Lost']
+    high_discount_orders = int((df['High Discount Flag'] == 'High Discount (>30%)').sum())
+    worst_mode = rca_mode['Late Rate %'].idxmax()
+    worst_mode_rate = rca_mode.loc[worst_mode, 'Late Rate %']
+    market_rates = df.groupby('Market')['Late_delivery_risk'].mean() * 100
+    zip_missing_by_market = df.groupby('Market')['Order Zipcode'].apply(
+        lambda x: (x == 'Unknown').mean() * 100)
+    zip_markets = ', '.join(zip_missing_by_market[zip_missing_by_market > 50].index)
+
     print(f"\n{'='*65}")
     print(f"  ROOT CAUSE ANALYSIS SUMMARY")
     print(f"{'='*65}")
     print(f"""
   Revenue Leakage:
-  → PRIMARY CAUSE: High discount rates (>30%) on Standard Class shipping
+  → PRIMARY CAUSE: {top_loss_mode} shipping carries the largest loss (${top_loss_amt:,.0f} of ${total_loss:,.0f}); {high_discount_orders:,} orders exceed the high-discount threshold
   → IMPACT: ${total_loss:,.0f} revenue lost ({leakage_pct:.1f}% of total sales)
-  → ACTION: Review discount policies for Standard Class shipments
+  → ACTION: Review pricing and shipping cost vs. margin for {top_loss_mode} shipments
 
   Late Deliveries:
-  → PRIMARY CAUSE: LATAM market + Standard Class shipping combination
+  → PRIMARY CAUSE: Shipping mode, not market ({worst_mode}: {worst_mode_rate}% late; market late rates only {market_rates.min():.1f}%–{market_rates.max():.1f}%)
   → IMPACT: {len(late_orders):,} late deliveries ({len(late_orders)/total*100:.1f}%)
-  → ACTION: Review logistics partners in LATAM region
+  → ACTION: Review {worst_mode} delivery promises and carrier performance
 
   Data Quality:
-  → PRIMARY CAUSE: Order Zipcode not captured for international orders
+  → PRIMARY CAUSE: Order Zipcode not captured for most markets (>50% missing in: {zip_markets})
   → IMPACT: {missing_zip:,} records ({missing_zip/total*100:.1f}%) with unknown zipcode
   → ACTION: Make Order Zipcode mandatory in order entry system (SAP)
 """)

@@ -7,12 +7,15 @@ Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 import pandas as pd
 import numpy as np
 import warnings
+from column_utils import normalize_columns
 warnings.filterwarnings('ignore')
 
 def enrich_and_detect_duplicates(df):
     print("=" * 65)
     print("  STEP 3: DATA ENRICHMENT & DUPLICATE DETECTION")
     print("=" * 65)
+
+    df = normalize_columns(df)
 
     # ── DATA ENRICHMENT ────────────────────────────────────────
     print("\n🔧 Data Enrichment — Adding Derived Master Data Fields:")

@@ -5,6 +5,7 @@ Runs all 5 steps in sequence: Profile → Cleanse → Enrich → RCA → Visuali
 """
 
 import os
+import sys
 import importlib.util
 import warnings
 warnings.filterwarnings('ignore')
@@ -12,6 +13,9 @@ warnings.filterwarnings('ignore')
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(ROOT, 'src')
 OUTPUT_DIR = os.path.join(ROOT, 'output')
+
+# Lets the step files import shared helpers (e.g. column_utils) from src/.
+sys.path.insert(0, SRC_DIR)
 
 
 def _load_step(filename, func_name):

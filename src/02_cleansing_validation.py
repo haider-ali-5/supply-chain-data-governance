@@ -7,6 +7,7 @@ Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 import pandas as pd
 import numpy as np
 import warnings
+from column_utils import normalize_columns
 warnings.filterwarnings('ignore')
 
 def cleanse_and_validate(df):
@@ -14,6 +15,7 @@ def cleanse_and_validate(df):
     print("  STEP 2: DATA CLEANSING & VALIDATION")
     print("=" * 65)
 
+    df = normalize_columns(df)
     original_count = len(df)
 
     # ── CLEANSING ──────────────────────────────────────────────

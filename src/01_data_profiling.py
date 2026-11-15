@@ -7,6 +7,7 @@ Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 import pandas as pd
 import numpy as np
 import warnings
+from column_utils import normalize_columns
 warnings.filterwarnings('ignore')
 
 def load_and_profile():
@@ -17,6 +18,7 @@ def load_and_profile():
 
     # Load dataset
     df = pd.read_csv('../data/supply_chain.csv', encoding='latin1')
+    df = normalize_columns(df)
     
     print(f"\n📦 Dataset Overview:")
     print(f"   Records       : {len(df):,}")

@@ -1,6 +1,6 @@
 -- ================================================================
 -- MASTER DATA GOVERNANCE — SQL QUERIES
--- Siemens Energy | Author: Haider Ali | M.Sc. Data Science @ BHT
+-- Supply Chain Master Data Governance | Author: Haider Ali | M.Sc. Data Science @ BHT
 -- ================================================================
 -- Run these queries in any SQL tool (DBeaver, SQLite, BigQuery)
 -- after importing supply_chain_enriched.csv as a table

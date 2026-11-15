@@ -34,7 +34,7 @@ The project follows the complete data governance lifecycle — from profiling an
 ## 🏗️ Project Structure
 
 ```
-siemens-data-governance/
+supply-chain-data-governance/
 │
 ├── 📁 data/
 │   ├── supply_chain.csv              # Raw DataCo Supply Chain dataset
@@ -133,10 +133,21 @@ siemens-data-governance/
 
 ## 🚀 How to Run
 
+### 1. Get the data
+
+The dataset is not included in the repo (see `.gitignore`). Download the
+**DataCo Smart Supply Chain for Big Data Analysis** dataset from Kaggle:
+<https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis>
+
+Extract `DataCoSupplyChainDataset.csv` and save it as `data/supply_chain.csv`
+(create the `data/` folder if it does not exist).
+
+### 2. Run
+
 ```bash
 # Clone the repo
-git clone https://github.com/haider-ali-5/siemens-data-governance.git
-cd siemens-data-governance
+git clone https://github.com/haider-ali-5/supply-chain-data-governance.git
+cd supply-chain-data-governance
 
 # Install dependencies
 pip install pandas numpy matplotlib seaborn openpyxl

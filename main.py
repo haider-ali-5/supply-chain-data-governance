@@ -1,41 +1,62 @@
 """
-MASTER DATA GOVERNANCE PIPELINE — MAIN RUNNER
-Siemens Energy | Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
+SUPPLY CHAIN MASTER DATA GOVERNANCE PIPELINE — MAIN RUNNER
+Supply Chain Master Data Governance | Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 Runs all 5 steps in sequence: Profile → Cleanse → Enrich → RCA → Visualize
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__))
-
-import pandas as pd
+import importlib.util
 import warnings
 warnings.filterwarnings('ignore')
 
-from src.step01_profiling      import load_and_profile
-from src.step02_cleansing      import cleanse_and_validate
-from src.step03_enrichment     import enrich_and_detect_duplicates
-from src.step04_rca            import root_cause_analysis
-from src.step05_visualizations import create_all_charts
+ROOT = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(ROOT, 'src')
+OUTPUT_DIR = os.path.join(ROOT, 'output')
+
+
+def _load_step(filename, func_name):
+    """Load a function from a numbered step file (e.g. 01_data_profiling.py).
+
+    Names starting with a digit are not valid for a normal `import`,
+    so the file is loaded by path with importlib.
+    """
+    path = os.path.join(SRC_DIR, filename)
+    spec = importlib.util.spec_from_file_location(filename[:-3].replace('.', '_'), path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return getattr(module, func_name)
+
+
+load_and_profile              = _load_step('01_data_profiling.py',           'load_and_profile')
+cleanse_and_validate          = _load_step('02_cleansing_validation.py',     'cleanse_and_validate')
+enrich_and_detect_duplicates  = _load_step('03_enrichment_deduplication.py', 'enrich_and_detect_duplicates')
+root_cause_analysis           = _load_step('04_root_cause_analysis.py',      'root_cause_analysis')
+create_all_charts             = _load_step('05_visualizations.py',           'create_all_charts')
+
 
 def run_pipeline():
     print("\n")
     print("█" * 65)
     print("█  MASTER DATA GOVERNANCE PIPELINE                           █")
-    print("█  Siemens Energy | Haider Ali | M.Sc. Data Science @ BHT   █")
+    print("█  Supply Chain Master Data Governance | Haider Ali         █")
     print("█" * 65)
     print()
+
+    # The step modules use paths relative to src/ (e.g. ../data/supply_chain.csv),
+    # so run the pipeline from there regardless of where main.py was launched.
+    os.chdir(SRC_DIR)
+    os.makedirs(os.path.join(OUTPUT_DIR, 'charts'), exist_ok=True)
 
     # STEP 1
     df, profile = load_and_profile()
 
     # STEP 2
     df_clean, rules = cleanse_and_validate(df)
-    df_clean.to_csv('output/supply_chain_cleaned.csv', index=False)
+    df_clean.to_csv(os.path.join(OUTPUT_DIR, 'supply_chain_cleaned.csv'), index=False)
 
     # STEP 3
     df_enriched = enrich_and_detect_duplicates(df_clean)
-    df_enriched.to_csv('output/supply_chain_enriched.csv', index=False)
+    df_enriched.to_csv(os.path.join(OUTPUT_DIR, 'supply_chain_enriched.csv'), index=False)
 
     # STEP 4
     rca_results = root_cause_analysis(df_enriched)

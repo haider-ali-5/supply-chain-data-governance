@@ -1,6 +1,6 @@
 """
 STEP 5: DATA GOVERNANCE VISUALIZATIONS
-Master Data Governance Project — Siemens Energy
+Supply Chain Master Data Governance Project
 Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 """
 

@@ -1,6 +1,6 @@
 """
 STEP 2: DATA CLEANSING & VALIDATION
-Master Data Governance Project — Siemens Energy
+Supply Chain Master Data Governance Project
 Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 """
 

@@ -1,6 +1,6 @@
 """
 STEP 1: DATA PROFILING & QUALITY ASSESSMENT
-Master Data Governance Project — Siemens Energy
+Supply Chain Master Data Governance Project
 Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 """
 

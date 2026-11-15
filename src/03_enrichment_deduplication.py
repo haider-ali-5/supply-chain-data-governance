@@ -1,6 +1,6 @@
 """
 STEP 3: DATA ENRICHMENT & DUPLICATE DETECTION
-Master Data Governance Project — Siemens Energy
+Supply Chain Master Data Governance Project
 Author: Haider Ali | M.Sc. Data Science @ BHT Berlin
 """
 

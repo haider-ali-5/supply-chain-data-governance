@@ -27,7 +27,7 @@ The project follows the complete data governance lifecycle — from profiling an
 | Product Description Completeness | 0% | 99% | ❌ Critical |
 | On-Time Delivery Rate | 45.2% | 85% | ❌ Critical |
 | Profitable Orders Rate | 80.6% | 90% | ⚠️ Below Target |
-| **Revenue Leakage** | **18.7%** | **<5%** | **❌ Critical** |
+| **Revenue Leakage** | **10.6%** | **<5%** | **❌ Critical** |
 
 ---
 
@@ -96,8 +96,8 @@ supply-chain-data-governance/
 - Detected duplicate patterns across Customer Email and Order records
 
 ### Step 4 — Root Cause Analysis
-- **Revenue Leakage:** 18.7% of orders lose money → Primary cause: High discount rates (>30%) on Standard Class shipping
-- **Late Deliveries:** 54.8% late → Primary cause: LATAM market + Standard Class combination
+- **Revenue Leakage:** 33,784 orders (18.7%) lose money, costing $3.88M = 10.6% of total sales → Largest share comes from Standard Class shipping ($2.33M of the loss); no order exceeds the 30% discount threshold, so discounting is not the driver
+- **Late Deliveries:** 54.8% late → Late rate is uniform across markets (54.4–55.2%); the driver is shipping mode: First Class 95.3% late, Second Class 76.6%, Standard Class 38.1%
 - **Data Quality:** Order Zipcode 86.2% missing → Not captured for international orders in ERP system
 
 ### Step 5 — Visualizations (5 Charts)
@@ -170,11 +170,11 @@ python3 05_visualizations.py
 
 | Priority | Issue | Root Cause | Recommendation |
 |----------|-------|-----------|----------------|
-| 🔴 High | Revenue Leakage (18.7%) | High discounts + Standard Class | Cap discounts at 20% for Standard Class |
-| 🔴 High | Late Deliveries (54.8%) | LATAM + Standard Class | Review logistics partners in LATAM |
+| 🔴 High | Revenue Leakage (10.6%) | Loss-making orders concentrated in Standard Class ($2.33M of $3.88M) | Review Standard Class pricing and shipping cost vs. margin |
+| 🔴 High | Late Deliveries (54.8%) | First Class (95.3% late) and Second Class (76.6% late) | Review First/Second Class delivery promises and carrier performance |
 | 🔴 High | Order Zipcode Missing (86.2%) | Not captured in ERP | Make mandatory in SAP order entry |
 | 🔴 High | Product Description Empty | No catalog integration | Integrate product catalog into SAP MDM |
-| 🟡 Medium | Suspected Fraud (2.2%) | No fraud detection rules | Implement automated fraud flagging |
+| 🟡 Medium | Suspected Fraud (2.3%) | No fraud detection rules | Implement automated fraud flagging |
 
 ---
 
